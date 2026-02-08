@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: ai-assistant-backend
+
+
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:ai_assistant}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY:}
+    url: https://api.openai.com/v1/chat/completions
+    model: gpt-3.5-turbo
+    max-tokens: 2000
+    temperature: 0.7
+    timeout: 30s
+
+
+server:
+  port: 8080
+  netty:
+    connection-timeout: 2s
+
+
+logging:
+  level:
+    com.aiassistant: DEBUG
+    reactor.netty: INFO
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
